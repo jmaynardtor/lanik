@@ -1,0 +1,826 @@
+﻿<html><head>
+                <meta charset="UTF-8">
+                <title>Lànîk</title>
+                <link rel="preconnect" href="https://fonts.googleapis.com">
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+                <link href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+            <style>
+    @charset "UTF-8";
+    html, body {
+        align-items: center;
+    }
+    
+    body {
+        font-family: serif;
+        font-size: 11pt;
+        min-width: 400px;
+        min-height: 400px;
+        margin: 0px;
+        overflow: hidden;
+        -webkit-app-region: drag;
+    }
+    
+    button {
+        font-family: serif;
+        font-size: 11pt;
+        transition-duration: 0.33s;
+        cursor: pointer;
+        -webkit-app-region: no-drag;
+        -webkit-user-select: none;
+    }
+    button[id=overwrite] {
+        font-weight: bold;
+    }
+    button.collapser {
+        max-width: 1em;
+        height: 100%;
+        border-color: transparent !important;
+        background-color: rgba(17, 17, 17, 0.0666666667);
+        display: flex;
+        float: right;
+        margin: 0px;
+        padding: 0px;
+    }
+    button.collapser:hover {
+        border-color: rgba(255, 255, 255, 0.2666666667) !important;
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+    button.collapser::after {
+        content: "‖";
+        margin: auto;
+    }
+    button.collapser-h {
+        max-height: 1.33em;
+        width: 100% !important;
+        border-color: transparent !important;
+        background-color: rgba(17, 17, 17, 0.0666666667);
+        display: flex;
+        margin: 0px;
+        padding: 0px;
+    }
+    button.collapser-h:hover {
+        border-color: rgba(255, 255, 255, 0.2666666667) !important;
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+    button.collapser-h::after {
+        content: "═";
+        margin: auto;
+    }
+    
+    .tab-container {
+        width: 100vw;
+        height: 100vh;
+        -webkit-user-select: none;
+    }
+    .tab-container .button-container {
+        width: 100%;
+        text-align: center;
+    }
+    .tab-container .button-container button {
+        border: none;
+        outline: none;
+        padding: 4px;
+        height: 100%;
+        width: fit-content;
+    }
+    .tab-container .window-control {
+        text-align: left;
+        height: 0px;
+        overflow: visible;
+    }
+    .tab-container .window-control button {
+        border: none;
+        outline: none;
+        background-color: transparent;
+    }
+    .tab-container .window-control button.close:hover {
+        background-color: #9e0f0f;
+    }
+    .tab-container .window-control button.minimize:hover {
+        background-color: #c9c911;
+    }
+    .tab-container .window-control button.maximize:hover {
+        background-color: #4eb94e;
+    }
+    .tab-container .tab-pane {
+        height: 80%;
+        box-sizing: border-box;
+        -webkit-app-region: no-drag;
+        -webkit-user-select: text;
+    }
+    
+    .row {
+        display: flex;
+        margin: auto;
+    }
+    .row:has(~ .collapsible-row .collapsed) {
+        height: 90vh !important;
+    }
+    
+    .column {
+        width: 100%;
+    }
+    
+    .collapsible-column {
+        min-width: 2%;
+        width: fit-content;
+    }
+    
+    .collapsible-row:has(.collapsed) {
+        height: 3vh !important;
+    }
+    
+    .collapsed {
+        display: none;
+    }
+    
+    .text-left {
+        text-align: left;
+    }
+    .text-right {
+        text-align: right;
+    }
+    .text-center {
+        text-align: center;
+    }
+    
+    .prelined {
+        white-space: pre-line;
+        /* This is solely to make the 
+ character work from the JS side */
+    }
+    
+    p {
+        margin: 0px;
+    }
+    
+    div[id=tables-pane] {
+        font-family: Gentium;
+        font-size: 11pt;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+        font-style: italic;
+        padding-top: 1em !important;
+    }
+    
+    .info {
+        font-family: serif;
+        font-size: 11pt;
+        font-style: italic;
+        line-height: 1.5em;
+        -webkit-user-select: none;
+    }
+    
+    .phonology {
+        font-family: Gentium;
+        font-size: 11pt;
+        width: 95%;
+    }
+    
+    .version-info {
+        font-family: serif;
+        font-size: 7pt;
+        text-align: left;
+        display: inline;
+        float: right;
+        -webkit-user-select: none;
+    }
+    
+    .lex-body {
+        white-space: pre-line;
+    }
+    .lex-entry {
+        font-family: Gentium;
+        font-size: 11pt;
+        transition: 0.3s;
+        padding: 1em;
+    }
+    
+    .variants {
+        font-family: Gentium;
+        font-size: 11pt;
+    }
+    .variants div.column {
+        margin: 0.6em;
+    }
+    
+    .capitalize {
+        text-transform: capitalize;
+    }
+    
+    .tag-item {
+        font-family: serif;
+        font-size: 7pt;
+        border-radius: 7%;
+        width: fit-content;
+        padding: 0.2em;
+        margin: 0.2em;
+        text-transform: uppercase;
+        display: inline-block;
+    }
+    
+    .sense {
+        font-family: Gentium;
+        font-size: 9pt;
+        border-radius: 7%;
+        width: fit-content;
+        padding: 0.2em;
+        margin: 0.2em;
+        font-weight: bold;
+        font-style: italic;
+        display: inline-block;
+        background-color: transparent;
+        margin-top: 1em;
+    }
+    
+    .lect {
+        font-family: serif;
+        font-size: 9pt;
+        font-style: italic;
+        margin-top: 0.1em;
+    }
+    
+    [id=entry-counter] {
+        font-family: serif;
+        font-size: 7pt;
+        border-radius: 7%;
+        width: fit-content;
+        padding: 0.2em;
+        margin: 0.2em;
+        text-transform: uppercase;
+        font-weight: bold;
+        margin: auto;
+    }
+    
+    .scrolled {
+        overflow-y: auto;
+        overflow-x: wrap;
+    }
+    
+    .container {
+        border-radius: 6px;
+        text-align: center;
+        margin: 6px;
+        padding: 6px;
+    }
+    
+    .row button {
+        padding: 2px 10px 2px 10px;
+        margin: 4px auto 4px auto;
+        display: flex;
+        width: fit-content;
+        border: 1px solid black;
+        border-radius: 8px;
+    }
+    
+    label {
+        font-family: serif;
+        font-size: 11pt;
+        -webkit-user-select: none;
+    }
+    
+    .pronunciation {
+        font-family: Gentium;
+        font-size: 9pt;
+    }
+    
+    textarea, input {
+        font-family: Gentium;
+        font-size: 11pt;
+        display: flex;
+        text-align: center;
+        padding: 4px;
+        margin: 1px auto 1px auto;
+        border: none;
+        border-radius: 3px;
+        width: 80%;
+        resize: vertical;
+        transition: 0.2s;
+    }
+    textarea .pronunciation, input .pronunciation {
+        font-family: Gentium;
+        font-size: 9pt;
+    }
+    textarea[type=number], input[type=number] {
+        padding: 1px;
+        width: 4em;
+    }
+    textarea[type=checkbox], input[type=checkbox] {
+        appearance: none;
+        margin: auto;
+        font: inherit;
+        width: 1rem;
+        height: 1rem;
+        border-radius: 0.15em;
+        transform: translateY(-0.075em);
+        display: grid;
+        place-content: center;
+    }
+    textarea[type=checkbox]::before, input[type=checkbox]::before {
+        content: "";
+        width: 0.65em;
+        height: 0.65em;
+        transform: scale(0);
+        transition: 120ms transform ease-in-out;
+    }
+    textarea[type=checkbox]:checked::before, input[type=checkbox]:checked::before {
+        transform: scale(1);
+        clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    }
+    
+    .header input {
+        width: 70%;
+    }
+    
+    .narrow {
+        width: 50%;
+        margin: auto;
+    }
+    .narrow-col {
+        width: 15%;
+    }
+    
+    .search {
+        text-align: left;
+        width: 100%;
+        margin: 2px auto 2px auto;
+    }
+    
+    .search-container {
+        padding: 0 0.5em 0 0.5em;
+        position: relative;
+    }
+    
+    table {
+        border-collapse: collapse;
+        width: 95%;
+    }
+    table-container {
+        font-family: Gentium;
+        font-size: 11pt;
+        margin: auto;
+        padding: 30px 5%;
+    }
+    table-title {
+        font-family: Gentium;
+        font-size: 14pt;
+        font-style: italic;
+    }
+    
+    td {
+        padding: 2px 6px 2px 6px;
+        text-align: center;
+        user-select: none;
+    }
+    
+    .inflection {
+        font-family: Gentium;
+        font-size: 7pt;
+    }
+    .inflection h1, .inflection h2, .inflection h3, .inflection h4, .inflection h5, .inflection h6 {
+        padding-top: 0.2em;
+    }
+    .inflection h1 {
+        font-size: 1.5em;
+    }
+    .inflection h2 {
+        font-size: 1.3em;
+    }
+    .inflection h3 {
+        font-size: 1.1em;
+    }
+    .inflection h4 {
+        font-size: 1em;
+    }
+    .inflection h5 {
+        font-size: 0.9em;
+    }
+    .inflection h6 {
+        font-size: 0.8em;
+    }
+    
+    ::-webkit-scrollbar {
+        width: 9px;
+    }
+    ::-webkit-scrollbar-thumb {
+        border-radius: 6px;
+        transition: 0.2s;
+    }
+    ::-webkit-scrollbar-button {
+        display: none;
+    }
+    ::-webkit-scrollbar-corner {
+        border-radius: 6px 0px 0px 0px;
+    }
+    ::-webkit-resizer {
+        border-radius: 6px 0px 0px 0px;
+    }
+    
+    hr {
+        margin-bottom: 0.2em;
+        margin-top: 0.2em;
+        max-width: 66.66%;
+        padding: 0px;
+    }
+    
+    .milkyWay {
+        width: 100px;
+        height: 100px;
+        background: transparent;
+        margin: auto;
+        position: relative;
+        border-radius: 50%;
+    }
+    .milkyWay .planet {
+        border: 1px solid white;
+        animation-name: orbit;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        animation-play-state: paused;
+    }
+    .milkyWay .planet::before, .milkyWay .planet::after {
+        position: absolute;
+        content: "";
+        display: block;
+        border-radius: 50%;
+    }
+    .milkyWay > div {
+        position: absolute;
+        border-radius: 50%;
+    }
+    
+    .sun {
+        background: #faca09;
+        width: 10%;
+        height: 10%;
+        top: 45%;
+        left: 45%;
+    }
+    
+    .mercury {
+        width: 20%;
+        height: 20%;
+        top: calc(40% - 1px);
+        left: calc(40% - 1px);
+        animation-duration: 2s;
+    }
+    .mercury::before {
+        background: #9fb5b6;
+        width: 16%;
+        height: 16%;
+        top: -8%;
+        left: 42%;
+    }
+    
+    .venus {
+        width: 30%;
+        height: 30%;
+        top: calc(35% - 1px);
+        left: calc(35% - 1px);
+        animation-duration: 3s;
+    }
+    .venus::before {
+        background: #ECC98E;
+        width: 10%;
+        height: 10%;
+        top: -5%;
+        left: 45%;
+    }
+    
+    .earth {
+        width: 40%;
+        height: 40%;
+        top: calc(30% - 1px);
+        left: calc(30% - 1px);
+        animation-duration: 4s;
+    }
+    .earth::before {
+        background: #208fd8;
+        width: 10%;
+        height: 10%;
+        top: -5%;
+        left: 45%;
+    }
+    .earth::after {
+        background: #33c470;
+        width: 10%;
+        height: 6%;
+        top: -3%;
+        left: 45%;
+        transform: rotate(45deg);
+    }
+    
+    .mars {
+        width: 50%;
+        height: 50%;
+        top: calc(25% - 1px);
+        left: calc(25% - 1px);
+        animation-duration: 5s;
+    }
+    .mars::before {
+        background: #d35400;
+        width: 6%;
+        height: 6%;
+        top: -3%;
+        left: 47%;
+    }
+    
+    .jupiter {
+        width: 60%;
+        height: 60%;
+        top: calc(20% - 1px);
+        left: calc(20% - 1px);
+        animation-duration: 6s;
+    }
+    .jupiter::before {
+        background: #d4975a;
+        width: 10%;
+        height: 10%;
+        top: -5%;
+        left: 45%;
+    }
+    
+    .saturn {
+        width: 70%;
+        height: 70%;
+        top: calc(15% - 1px);
+        left: calc(15% - 1px);
+        animation-duration: 7s;
+    }
+    .saturn::before {
+        background: #E4D191;
+        width: 7%;
+        height: 7%;
+        top: -4%;
+        left: 48%;
+    }
+    .saturn::after {
+        background: #F0E4C1;
+        width: 12%;
+        height: 1%;
+        top: -1%;
+        left: 45.5%;
+        transform: rotate(-15deg);
+    }
+    
+    .uranus {
+        width: 80%;
+        height: 80%;
+        top: calc(10% - 1px);
+        left: calc(10% - 1px);
+        animation-duration: 8s;
+    }
+    .uranus::before {
+        background: #3498db;
+        width: 5%;
+        height: 5%;
+        top: -2%;
+        left: 48%;
+    }
+    .uranus::after {
+        background: #b0d0e5;
+        width: 8%;
+        height: 0.5%;
+        top: 0%;
+        left: 46.25%;
+        transform: rotate(-15deg);
+    }
+    
+    .neptune {
+        width: 90%;
+        height: 90%;
+        top: calc(5% - 1px);
+        left: calc(5% - 1px);
+        animation-duration: 9s;
+    }
+    .neptune::before {
+        background: #1269a3;
+        width: 4%;
+        height: 4%;
+        top: -1%;
+        left: 49%;
+    }
+    .neptune::after {
+        background: #91cbf2;
+        width: 6%;
+        height: 0.5%;
+        top: 0.5%;
+        left: 48%;
+        transform: rotate(-15deg);
+    }
+    
+    .pluto {
+        width: 100%;
+        height: 100%;
+        top: calc(0% - 1px);
+        left: calc(0% - 1px);
+        animation-duration: 10s;
+    }
+    .pluto::before {
+        background: #b78c7a;
+        width: 1%;
+        height: 1%;
+        top: -0.5%;
+        left: 49.5%;
+    }
+    
+    @keyframes orbit {
+        0% {
+            transform: rotate(-180deg);
+        }
+        100% {
+            transform: rotate(180deg);
+        }
+    }
+    /* EditorJS Overrides */
+    .ce-toolbar__plus {
+        transition: 0.33s;
+    }
+    .ce-toolbar__content {
+        max-width: 90% !important;
+    }
+    .ce-block__content {
+        max-width: 80% !important;
+    }
+    .ce-block--selected .ce-block__content {
+        background-color: rgba(255, 255, 255, 0.3333333333) !important;
+    }
+    
+    ::selection {
+        background-color: rgba(255, 255, 255, 0.3333333333) !important;
+    }
+    
+    /*# sourceMappingURL=index.css.map */
+    
+    </style><style>
+    @import url("https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,4000,7001,4001,700&display=swap");
+    body {
+        overflow-y: auto;
+        text-align: center;
+        margin-left: 15vw;
+        margin-right: 15vw;
+        background-color: #333;
+        color: #ccc;
+    }
+    
+    .container {
+        overflow-x: clip;
+        overflow-y: auto;
+    }
+    
+    .lex-body {
+        font-family: "Gentium Book Plus", serif;
+    }
+    
+    .tag-item {
+        font-family: serif;
+    }
+    
+    .search {
+        font-family: "Gentium Book Plus", serif;
+    }
+    
+    .phonology, .pronunciation {
+        font-family: "Gentium Book Plus", serif !important;
+    }
+    
+    [id=entry-counter] {
+        font-family: serif;
+    }
+    
+    td {
+        text-align: center;
+        border: 2px solid #ccc;
+    }
+    
+    tr {
+        background-color: transparent !important;
+    }
+    
+    table {
+        border-collapse: collapse;
+        margin: auto;
+    }
+    
+    .table-container, .table-title {
+        font-family: "Gentium Book Plus", serif;
+        align-items: center;
+    }
+    
+    button {
+        display: none;
+    }
+    
+    .info {
+        display: none;
+    }
+    
+    .search-row {
+        display: inline-flex;
+    }
+    
+    @media only screen and (min-device-width: 601px) {
+        .sidebar {
+            max-width: 18% !important;
+        }
+    }
+    @media only screen and (max-device-width: 600px) {
+        body {
+            width: 100vw !important;
+            font-size: 12pt;
+            padding: 2vw;
+        }
+        body > h1 {
+            font-size: 36pt;
+        }
+        div.container {
+            height: 60vh !important;
+        }
+        div.column {
+            display: block;
+        }
+        div.sidebar {
+            max-height: 18vh;
+        }
+        div.row {
+            display: block;
+            min-width: 96vw !important;
+            margin-bottom: 36vh;
+        }
+        div.variants {
+            margin-bottom: 4rem;
+        }
+        .lex-entry, .lex-body {
+            font-size: 16pt !important;
+        }
+        .capitalize {
+            font-size: 24pt !important;
+        }
+        .tag-item, [id=entry-counter] {
+            font-size: 16pt;
+        }
+        .search, .sidebar p {
+            font-size: 24pt;
+        }
+        td {
+            font-size: 18pt !important;
+        }
+    }
+    </style></head><body><h1>Lànîk</h1><div><h2>Introduction</h2><p>Lànîk (la'nik) is the language of the elves on the island of Bésa (baysa), located in the Pacific Ocean off the coast of Japan. This document outlines the Lànîk language, how to use it, and all of its intricacies.</p><p>***</p><h2>Elven vs Elf vs. Elvish</h2><p>The difference between "elven" and "elvish" is quite simple: an elf is an elven being (the same way you're a human being), and if something is elvish then it's of elves.</p><p>"You're human, and I'm elven" -- <b>Correct</b> || "You're a human, and I'm an elven" -- <b>Incorrect </b>|| "You're a human, and I'm an elf" -- <b>Correct</b></p><p>Clear as mud, right? This concept is difficult for humans (especially English-speaking ones) because "human" is used for multiple means while "elven" and "elvish" are each only used for one. Basically, "elven" is only used to describe species, and "elvish" is used to describe origin, while "human" is used for both.</p><p>"You're a human being, a.k.a. a human, doing human things" vs. "I'm an elven being, a.k.a. an elf, doing elvish things."</p><p>Once you've wrapped your head around it, and with practice, knowing which to say will pretty much be up to what sounds right.</p><p>***</p><h2>Language History</h2><p>Lànîk is the modern Elvish language of the elves in Bésa, but before its development between 200 and 300 CE, elves spoke, wrote, and communicated in Ofrana (<i>ofrana</i>). The earliest known use of Ofrana was spoken and written in Bésa as far back as 200,000 BCE by homo elevensis, who would later become known as Elves. For reference, the homo elevensis split from its common ancestor with homo sapiens, the neanderthals, separating elven evolution from human evolution approximately 250,000 years ago.</p><p>Between 1667 and 1674, Ofrana’s written form, called Xinbo (<i>sheenbo</i>), was replaced with a latin script known as Ekdeçi (<i>ekdeth'ee</i>), as Xinbo’s unique script was widely considered difficult to learn and over-complicated.&nbsp; This new form of writing naturally morphed the spoken language into Lanîk as we know it today such that is considered an entirely separate language. This was made official in 1762.</p><p>Today, elves in Bésa also speak other languages as well: English, being the most common language in business and media; Mandarin, the most commonly spoken language in the world; and Japanese because of its geographical proximity to Japan, as well as Japan’s many cultural similarities to Bésian culture.</p><p>As of the creation of this document, English is a mandatory part of Bésa’s national school curriculum, with daily classes in English beginning in komonida (<i>komoneeda</i>, preschool, ages 3–4), and continuing through sel-boken (<i>sel-boken</i>, ages 13–14). In dogako (<i>dogako</i>, secondary school, ages 12–13 through 17–18), English becomes an elective class, students can choose whether or not to take English classes.</p><p>In ai-boken (<i>aee-boken</i>, 1st grade, ages 5–6), students have the choice to learn Mandarin or Japanese in weekly classes, but must choose one or the other. In dogako, students can choose whether or not to continue taking them.</p><p>Through this aspect of the Bésian school system, by the time they sotsugo (<i>sotsugo</i>, graduate) from aigako (<i>aee-gako</i>, primary school), all elves are at least bilingual, able to speak Lanîk natively, English almost fluently, and can make basic conversation in either Mandarin or Japanese.</p><p>***</p><h2>The Lànîk Alphabet: Ekdeçi</h2><p>Ekdeçi (ekdeth'ee) is the written form of Lànîk.</p><table><tbody><tr><td>Ekdeçi</td><td>a</td><td>à</td><td>b</td><td>d</td><td>e</td><td>é</td><td>f</td><td>g</td><td>i</td><td>î</td><td>j</td><td>k</td><td>l</td></tr><tr><td><i>Roman.</i></td><td><i>a</i></td><td><i>a'</i></td><td><i>b</i></td><td><i>d</i></td><td><i>e</i></td><td><i>ay</i></td><td><i>f</i></td><td><i>g</i></td><td><i>ee</i></td><td><i>i</i></td><td><i>jj</i></td><td><i>k</i></td><td><i>l</i></td></tr><tr><td>Ekdeçi</td><td>m</td><td>n</td><td>o</td><td>p</td><td>r</td><td>s</td><td>x</td><td>t</td><td>c</td><td>ç</td><td>u</td><td>v</td><td></td></tr><tr><td><i>Roman.</i></td><td><i>m</i></td><td><i>n</i></td><td><i>o</i></td><td><i>p</i></td><td><i>r</i></td><td><i>s</i></td><td><i>sh</i></td><td><i>t</i></td><td><i>th</i></td><td><i>th'</i></td><td><i>u</i></td><td><i>v</i></td><td></td></tr></tbody></table><p>Below is an expanded view of the Ekdeçi alphabet with romanization, IPA, and examples that will help you better navigate and better understand Lànik.</p><table><tbody><tr><td><b>-- EKDEÇI --</b></td><td><b>-- NAME --</b></td><td><b>-- NAME (IPA) --</b></td><td><b>-- ROMANIZATION --</b></td><td><b>-- SOUND --</b></td><td><b>-- SOUND (IPA) --</b></td><td><b>-- EXAMPLE --</b></td></tr><tr><td>A a</td><td>ana</td><td>/ana/</td><td>" a "</td><td>“ah”</td><td>/a/</td><td><u class="cdx-underline">A</u>pple</td></tr><tr><td>À à</td><td>àno</td><td>/ɑnoʊ/</td><td>" a' "</td><td>“aw”</td><td>/ɑ/</td><td><u class="cdx-underline">O</u>pposite</td></tr><tr><td>B b</td><td>bé</td><td>/beɪ/</td><td>" b "</td><td>“b”</td><td>/b/</td><td><u class="cdx-underline">B</u>all</td></tr><tr><td>D d</td><td>dé</td><td>/deɪ/</td><td>" d "</td><td>“d”</td><td>/d/</td><td><u class="cdx-underline">D</u>og</td></tr><tr><td>E e</td><td>ena</td><td>/ɛna/</td><td>" e "</td><td>“e”</td><td>/ɛ/</td><td><u class="cdx-underline">E</u>nter</td></tr><tr><td>É é</td><td>éno</td><td>/eɪnoʊ/</td><td>" ay "</td><td>“ay”</td><td>/eɪ/</td><td><u class="cdx-underline">A</u>pe</td></tr><tr><td>F f</td><td>fà</td><td>/fɑ/</td><td>" f "</td><td>“f”</td><td>/f/</td><td><u class="cdx-underline">F</u>amily</td></tr><tr><td>G g</td><td>go</td><td>/ɡoʊ/</td><td>" g "</td><td>“g” (hard g)</td><td>/ɡ/</td><td><u class="cdx-underline">G</u>reat</td></tr><tr><td>I i</td><td>ina</td><td>/ina/</td><td>" ee "</td><td>“ee”</td><td>/i/</td><td><u class="cdx-underline">E</u>qual</td></tr><tr><td>Î î</td><td>îno</td><td>/ɪnoʊ/</td><td>" i "</td><td>“i”</td><td>/ɪ/</td><td><u class="cdx-underline">I</u>nside</td></tr><tr><td>J j</td><td>jà</td><td>/ʒɑ/</td><td>" jj "</td><td>“jj” (soft j)</td><td>/ʒ/</td><td>Televi<u class="cdx-underline">s</u>ion</td></tr><tr><td>K k</td><td>ko</td><td>/koʊ/</td><td>" k "</td><td>“k”</td><td>/k/</td><td><u class="cdx-underline">K</u>id</td></tr><tr><td>L l</td><td>la</td><td>/la/</td><td>" l "</td><td>“l”</td><td>/l/</td><td><u class="cdx-underline">L</u>oud</td></tr><tr><td>M m</td><td>mo</td><td>/moʊ/</td><td>" m "</td><td>“m”</td><td>/m/</td><td><u class="cdx-underline">M</u>ouse</td></tr><tr><td>N n</td><td>nu</td><td>/nu/</td><td>" n "</td><td>“n”</td><td>/n/</td><td><u class="cdx-underline">N</u>oise</td></tr><tr><td>O o</td><td>ona</td><td>/oʊn/</td><td>" o "</td><td>“oh”</td><td>/oʊ/</td><td><u class="cdx-underline">O</u>pen</td></tr><tr><td>P p</td><td>pé</td><td>/peɪ/</td><td>" p "</td><td>“p”</td><td>/p/</td><td><u class="cdx-underline">P</u>aper</td></tr><tr><td>R r</td><td>ro</td><td>/roʊ/</td><td>" r "</td><td>“r”</td><td>/r/</td><td><u class="cdx-underline">R</u>ound</td></tr><tr><td>S s</td><td>sà</td><td>/sɑ/</td><td>" s "</td><td>“s”</td><td>/s/</td><td><u class="cdx-underline">S</u>ound</td></tr><tr><td>X x</td><td>xà</td><td>/ʃɑ/</td><td>" sh "</td><td>“sh”</td><td>/ʃ/</td><td><u class="cdx-underline">Sh</u>ow</td></tr><tr><td>T t</td><td>té</td><td>/teɪ/</td><td>" t "</td><td>“t”</td><td>/t/</td><td><u class="cdx-underline">T</u>own</td></tr><tr><td>C c</td><td>cà</td><td>/θɑ/</td><td>" th "</td><td>“th” (voiceless)</td><td>/θ/</td><td><u class="cdx-underline">Th</u>ing</td></tr><tr><td>Ç ç</td><td>çé</td><td>/ðeɪ/</td><td>" th' "</td><td>“thh” (voiced)</td><td>/ð/</td><td><u class="cdx-underline">Th</u>ey</td></tr><tr><td>U u</td><td>una</td><td>/una/</td><td>" u " or " oo "</td><td>“oo”</td><td>/u/</td><td>S<u class="cdx-underline">u</u>per</td></tr><tr><td>V v</td><td>vé</td><td>/veɪ/</td><td>" v "</td><td>“v”</td><td>/v/</td><td><u class="cdx-underline">V</u>oice</td></tr></tbody></table><p>Additionally important to know before exploring this document, is that when two vowels are next to each other, a 'y'&nbsp; (/j/) is added between them. So ai is pronounced /aji/, rather than /ai/. This extends to romanization: xué is romanized as "shuay", but is pronounced /ʃujeɪ/.</p><p>***</p><h2>Diacritics</h2><p>The Lànîk alphabet uses diacritics (or accents) on some of its letters to change their pronunciation in specific ways. These accents only apply to pre-determined letters, and cannot be used on other letters.</p><table><tbody><tr><td>[ ´ ]</td><td>oxîs, meaning “acute”</td><td>used with Ee to form Éé</td></tr><tr><td>[ ` ]</td><td>ilnus, meaning “obtuse”</td><td>used with Aa to form Àà</td></tr><tr><td>[ ¸ ]</td><td>kistro, meaning “hook”</td><td>used with Cc to form Çç</td></tr><tr><td>[ ^ ]</td><td>taka, meaning “to lift”</td><td>used with Ii to form Îî</td></tr></tbody></table><p>***</p><h2>Punctuation Marks</h2><p>Punctuation marks in Lànîk, like many aspects of the language, are similar to those used in English, but with some important differences that can completely change the meaning of a sentence when ignored.</p><table><tbody><tr><td><b>-- ENGLISH --</b></td><td><b>-- ENGLISH GLYPH --</b></td><td><b>-- EKDEÇI --</b></td><td><b>-- PRONUNCIATION --</b></td><td><b>-- EKDEÇI GLYPH --</b></td></tr><tr><td>Full stop / Full point</td><td>.</td><td>àrît</td><td>a'rit</td><td>.</td></tr><tr><td>Comma</td><td>,</td><td>dem</td><td>dem</td><td>,</td></tr><tr><td>Quotation marks</td><td>“ ”</td><td>inofuxi</td><td>eenofooshee</td><td>« »</td></tr><tr><td>Hyphen / Dash</td><td>‒ / – / — / ―</td><td>pavila</td><td>paveela</td><td>~</td></tr><tr><td>Question mark</td><td>?</td><td>gimon</td><td>geemon</td><td>?</td></tr><tr><td>Exclamation mark</td><td>!</td><td>kantan</td><td>kantan</td><td>!</td></tr><tr><td>Colon</td><td>:</td><td>kolàn</td><td>kola'n</td><td>:</td></tr><tr><td>Semicolon</td><td>;</td><td>semikolàn</td><td>semeekola'n</td><td>;</td></tr><tr><td>Parentheses</td><td>[ ] / ( ) / { }</td><td>arîstaxi</td><td>aristashee</td><td>[ ]</td></tr></tbody></table><p>***</p><h2>Numerals</h2><p>The Lànîk number system is identical to English, except for the names of each number. The table below shows each number and its name.</p><table><tbody><tr><td><b>-- NUMBER --</b></td><td><b>-- NAME --</b></td></tr><tr><td>1</td><td>ai</td></tr><tr><td>2</td><td>do</td></tr><tr><td>3</td><td>sé</td></tr><tr><td>4</td><td>na</td></tr><tr><td>5</td><td>mu</td></tr><tr><td>6</td><td>set</td></tr><tr><td>7</td><td>sel</td></tr><tr><td>8</td><td>àt</td></tr><tr><td>9</td><td>nàn</td></tr><tr><td>10</td><td>dàks</td></tr><tr><td>50</td><td>mu-dàks</td></tr><tr><td>100</td><td>kel</td></tr><tr><td>500</td><td>mu-kel</td></tr><tr><td>1,000</td><td>ren</td></tr></tbody></table><p>In Lanîk, numbers rely heavily on math. The table below shows the use of math in the Lanîk number system.</p><table><tbody><tr><td><b>-- NUMBER --</b></td><td><b>-- NAME --</b></td></tr><tr><td>11</td><td>dàks-ai</td></tr><tr><td>12</td><td>dàks-do</td></tr><tr><td>13</td><td>dàks-sé</td></tr><tr><td>14</td><td>dàks-na</td></tr><tr><td>15</td><td>dàks-mu</td></tr><tr><td>16</td><td>dàks-set</td></tr><tr><td>17</td><td>dàks-sel</td></tr><tr><td>18</td><td>dàks-àt</td></tr><tr><td>19</td><td>dàks-nàn</td></tr><tr><td>20</td><td>do-dàks</td></tr><tr><td>25</td><td>do-dàks-mu</td></tr><tr><td>30</td><td>sé-dàks</td></tr><tr><td>40</td><td>na-dàks</td></tr><tr><td>50</td><td>mu-dàks</td></tr><tr><td>60</td><td>set-dàks</td></tr><tr><td>70</td><td>sel-dàks</td></tr><tr><td>80</td><td>àt-dàks</td></tr><tr><td>90</td><td>nàn-dàks</td></tr></tbody></table><p>***</p></div><hr><h2>Lexicon</h2><div class="row"><div class="column"><div class="lex-entry"><p>aee</p><p class="lect">Bésian Lanîk: <span class="pronunciation">aji</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">number</div><p></p><p>the lowest cardinal number; half of two; 1.</p>
+<p></p></div><div class="lex-entry"><p>aver</p><p class="lect">Bésian Lanîk: <span class="pronunciation">avɛɾ</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">verb</div><p></p><p>to possess, own, or hold.</p>
+<p></p></div><div class="lex-entry"><p>a't</p><p class="lect">Bésian Lanîk: <span class="pronunciation">ɑt</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">number</div><p></p><p>equivalent to the product of two and four; one more than seven, or two less than ten; 8.</p>
+<p></p></div><div class="lex-entry"><p>belshu</p><p class="lect">Bésian Lanîk: <span class="pronunciation">bɛlʃu</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><div class="tag-item">food</div><div class="tag-item">agriculture</div><p></p><p>any of a group of spore-producing organisms feeding on organic matter, including molds, yeast, mushrooms, and toadstools.</p>
+<p></p></div><div class="lex-entry"><p>da'ks</p><p class="lect">Bésian Lanîk: <span class="pronunciation">dɑks</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">number</div><p></p><p>equivalent to the product of five and two; one more than nine; 10.</p>
+<p></p></div><div class="lex-entry"><p>dron</p><p class="lect">Bésian Lanîk: <span class="pronunciation">dɾoʊn</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><div class="tag-item">culture</div><div class="tag-item">art</div><p></p><p>a wind instrument made from a tube with holes along it that are stopped by the fingers or keys, held vertically or horizontally so that the player’s breath strikes a narrow edge.</p>
+<p></p></div><div class="lex-entry"><p>ester</p><p class="lect">Bésian Lanîk: <span class="pronunciation">ɛstɛɾ</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">verb</div><p></p><p>to be, exist.</p>
+<p></p></div><div class="lex-entry"><p>gako</p><p class="lect">Bésian Lanîk: <span class="pronunciation">ɡakoʊ</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><div class="tag-item">education</div><p></p><p>an institution for educating children.</p>
+<p></p></div><div class="lex-entry"><p>ilnoos</p><p class="lect">Bésian Lanîk: <span class="pronunciation">ɪlnus</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><p></p><p>a mark (`) placed over certain letters in some languages to indicate an alteration of a sound, as of quality, quantity, or pitch.</p>
+<p></p><p class="lect">Bésian Lanîk</p><div class="sense">2.</div><div class="tag-item">adjective</div><p></p><p>(of an angle) more than 90° and less than 180°.</p>
+<p></p></div><div class="lex-entry"><p>ka'n</p><p class="lect">Bésian Lanîk: <span class="pronunciation">kɑn</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">adverb</div><p></p><p>on or to the right side.</p>
+<p></p></div><div class="lex-entry"><p>kaysa't</p><p class="lect">Bésian Lanîk: <span class="pronunciation">kɛɪsɑt</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><div class="tag-item">government</div><p></p><p>the civil force of a national or local government, responsible for the prevention and detection of crime and the maintenance of public order.</p>
+<p></p></div><div class="lex-entry"><p>komo</p><p class="lect">Bésian Lanîk: <span class="pronunciation">koʊmoʊ</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><p></p><p>a piece of ground adjoining a building or house.</p>
+<p></p><p class="lect">Bésian Lanîk</p><div class="sense">2.</div><div class="tag-item">noun</div><div class="tag-item">agriculture</div><p></p><p>a small piece of ground used to grow vegetables, fruit, herbs, or flowers.</p>
+<p></p></div><div class="lex-entry"><p>let</p><p class="lect">Bésian Lanîk: <span class="pronunciation">lɛt</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><div class="tag-item">food</div><p></p><p>an opaque white fluid rich in fat and protein, secreted by female mammals for the nourishment of their young.</p>
+<p></p></div><div class="lex-entry"><p>mu</p><p class="lect">Bésian Lanîk: <span class="pronunciation">mu</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">number</div><p></p><p>equivalent to the sum of two and three; one more than four, or half of ten; 5.</p>
+<p></p></div><div class="lex-entry"><p>na'k</p><p class="lect">Bésian Lanîk: <span class="pronunciation">nɑk</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><div class="tag-item">astronomy</div><p></p><p>the period of darkness in each twenty-four hours; the time from sunset to sunrise.</p>
+<p></p></div><div class="lex-entry"><p>needa</p><p class="lect">Bésian Lanîk: <span class="pronunciation">nida</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><p></p><p>a young human or elf being below the age of puberty or below the legal age of majority.</p>
+<p></p></div><div class="lex-entry"><p>oshis</p><p class="lect">Bésian Lanîk: <span class="pronunciation">oʊʃɪs</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><p></p><p>a mark (´) placed over certain letters in some languages to indicate an alteration of a sound, as of quality, quantity, or pitch.</p>
+<p></p><p class="lect">Bésian Lanîk</p><div class="sense">2.</div><div class="tag-item">adjective</div><p></p><p>(of an angle) less than 90°.</p>
+<p></p></div><div class="lex-entry"><p>raykee</p><p class="lect">Bésian Lanîk: <span class="pronunciation">ɾɛɪki</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><div class="tag-item">culture</div><div class="tag-item">art</div><div class="tag-item">medicine</div><p></p><p>a healing technique based on the principle that the practitioner can channel energy from the universe into the patient visually or by touch, to activate the natural healing processes of the patient’s body and restore physical and emotional well-being.</p>
+<p></p></div><div class="lex-entry"><p>sern</p><p class="lect">Bésian Lanîk: <span class="pronunciation">sɛɾn</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><div class="tag-item">culture</div><div class="tag-item">art</div><p></p><p>a song of great significance to elvish culture, ancient and full of meaning.</p>
+<p></p></div><div class="lex-entry"><p>say</p><p class="lect">Bésian Lanîk: <span class="pronunciation">sɛɪ</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">number</div><p></p><p>equivalent to the sum of one and two; one more than two; 3.</p>
+<p></p></div><div class="lex-entry"><p>taka</p><p class="lect">Bésian Lanîk: <span class="pronunciation">taka</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">verb</div><p></p><p>raise to a higher position or level.</p>
+<p></p><p class="lect">Bésian Lanîk</p><div class="sense">2.</div><div class="tag-item">noun</div><p></p><p>a mark (^) placed over a vowel in some languages to indicate contraction, length, or pitch or tone.</p>
+<p></p></div><div class="lex-entry"><p>ter</p><p class="lect">Bésian Lanîk: <span class="pronunciation">tɛɾ</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><div class="tag-item">astronomy</div><p></p><p>the planet on which we live; the world.</p>
+<p></p></div><div class="lex-entry"><p>uma'gee</p><p class="lect">Bésian Lanîk: <span class="pronunciation">umɑɡi</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><div class="tag-item">food</div><div class="tag-item">medicine</div><p></p><p>a hot drink made from the grounds of edible and/or medicinal mushrooms.</p>
+<p></p></div><div class="lex-entry"><p>valik</p><p class="lect">Bésian Lanîk: <span class="pronunciation">valɪk</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><div class="tag-item">anatomy</div><p></p><p>the end part of a person’s arm beyond the wrist, including the palm, fingers, and thumb.</p>
+<p></p></div></div><div class="column"><div class="lex-entry"><p>amor</p><p class="lect">Bésian Lanîk: <span class="pronunciation">amoʊɾ</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><p></p><p>an intense feeling of deep affection.</p>
+<p></p><p class="lect">Bésian Lanîk</p><div class="sense">2.</div><div class="tag-item">verb</div><p></p><p>feel deep affection for (someone).</p>
+<p></p></div><div class="lex-entry"><p>a'rit</p><p class="lect">Bésian Lanîk: <span class="pronunciation">ɑɾɪt</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">verb</div><p></p><p>(of an event, action, or process) come to an end; cease to happen.</p>
+<p></p><p class="lect">Bésian Lanîk</p><div class="sense">2.</div><div class="tag-item">verb</div><p></p><p>cause (an action, process, or event) to come to an end.</p>
+<p></p></div><div class="lex-entry"><p>ba's</p><p class="lect">Bésian Lanîk: <span class="pronunciation">bɑs</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><div class="tag-item">food</div><div class="tag-item">animal</div><div class="tag-item">livestock</div><div class="tag-item">farming</div><p></p><p>an uncastrated male bovine animal.</p>
+<p></p></div><div class="lex-entry"><p>boken</p><p class="lect">Bésian Lanîk: <span class="pronunciation">boʊkɛn</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><div class="tag-item">education</div><p></p><p>(with specifying ordinal number) those students in a school or school system who are grouped by age or ability for teaching at a particular level for a year.</p>
+<p></p></div><div class="lex-entry"><p>do</p><p class="lect">Bésian Lanîk: <span class="pronunciation">doʊ</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">number</div><p></p><p>equivalent to the sum of one and one; one less than three; 2.</p>
+<p></p></div><div class="lex-entry"><p>el</p><p class="lect">Bésian Lanîk: <span class="pronunciation">ɛl</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><div class="tag-item">anatomy</div><p></p><p>each of a pair of globular organs in the head through which people and vertebrate animals see, the visible part typically appearing almond-shaped in animals with eyelids.</p>
+<p></p></div><div class="lex-entry"><p>fol</p><p class="lect">Bésian Lanîk: <span class="pronunciation">foʊl</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><div class="tag-item">anatomy</div><p></p><p>the opening in the lower part of the human face, surrounded by the lips, through which food is taken in and from which speech and other sounds are emitted.</p>
+<p></p></div><div class="lex-entry"><p>gratis</p><p class="lect">Bésian Lanîk: <span class="pronunciation">ɡɾatɪs</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">expression</div><p></p><p>a polite expression used when acknowledging a gift, service, or compliment, or accepting or refusing an offer.</p>
+<p></p><p class="lect">Bésian Lanîk</p><div class="sense">2.</div><div class="tag-item">noun</div><p></p><p>an instance or means of expressing thanks.</p>
+<p></p></div><div class="lex-entry"><p>kan</p><p class="lect">Bésian Lanîk: <span class="pronunciation">kan</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><div class="tag-item">animal</div><p></p><p>a domesticated carnivorous mammal that typically has a long snout, an acute sense of smell, nonretractable claws, and a barking, howling, or whining voice.</p>
+<p></p></div><div class="lex-entry"><p>kel</p><p class="lect">Bésian Lanîk: <span class="pronunciation">kɛl</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">number</div><p></p><p>the number equivalent to the product of ten and ten; ten more than ninety; 100.</p>
+<p></p></div><div class="lex-entry"><p>keestro</p><p class="lect">Bésian Lanîk: <span class="pronunciation">kistɾoʊ</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><p></p><p>a mark (¸) placed under certain letters in some languages to indicate an alteration of a sound, as of quality, quantity, or pitch.</p>
+<p></p><p class="lect">Bésian Lanîk</p><div class="sense">2.</div><div class="tag-item">noun</div><p></p><p>a piece of metal or other material, curved or bent back at an angle, for catching hold of or hanging things on.</p>
+<p></p></div><div class="lex-entry"><p>komoneeda</p><p class="lect">Bésian Lanîk: <span class="pronunciation">koʊmoʊnida</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><div class="tag-item">education</div><div class="tag-item">culture</div><p></p><p>a school or class that prepares children for first grade. A child in komonida is typically 5 or 6 years old.</p>
+<p></p></div><div class="lex-entry"><p>leeber</p><p class="lect">Bésian Lanîk: <span class="pronunciation">libɛɾ</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><p></p><p>the power or right to act, speak, or think as one wants without hindrance or restraint.</p>
+<p></p></div><div class="lex-entry"><p>na</p><p class="lect">Bésian Lanîk: <span class="pronunciation">na</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">number</div><p></p><p>equivalent to the product of two and two; one more than three, or six less than ten; 4.</p>
+<p></p></div><div class="lex-entry"><p>na'n</p><p class="lect">Bésian Lanîk: <span class="pronunciation">nɑn</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">number</div><p></p><p>equivalent to the product of three and three; one more than eight, or one less than ten; 9.</p>
+<p></p></div><div class="lex-entry"><p>oka'mee</p><p class="lect">Bésian Lanîk: <span class="pronunciation">oʊkɑmi</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><div class="tag-item">animal</div><p></p><p>a wild carnivorous mammal of the dog family, living and hunting in packs. It is native to both Eurasia and North America, but has been widely exterminated.</p>
+<p></p></div><div class="lex-entry"><p>ren</p><p class="lect">Bésian Lanîk: <span class="pronunciation">ɾɛn</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">number</div><p></p><p>the number equivalent to the product of a hundred and ten; 1,000.</p>
+<p></p></div><div class="lex-entry"><p>sel</p><p class="lect">Bésian Lanîk: <span class="pronunciation">sɛl</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">number</div><p></p><p>equivalent to the sum of three and four; one more than six, or three less than ten; 7.</p>
+<p></p></div><div class="lex-entry"><p>set</p><p class="lect">Bésian Lanîk: <span class="pronunciation">sɛt</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">number</div><p></p><p>equivalent to the product of two and three; one more than five, or four less than ten; 6.</p>
+<p></p></div><div class="lex-entry"><p>shayn</p><p class="lect">Bésian Lanîk: <span class="pronunciation">ʃɛɪn</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">adverb</div><p></p><p>on or to the left side.</p>
+<p></p></div><div class="lex-entry"><p>tera</p><p class="lect">Bésian Lanîk: <span class="pronunciation">tɛɾa</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><p></p><p>a part of the earth’s surface that is not covered by water, as opposed to the sea or the air.</p>
+<p></p></div><div class="lex-entry"><p>uma</p><p class="lect">Bésian Lanîk: <span class="pronunciation">uma</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><div class="tag-item">food</div><div class="tag-item">agriculture</div><p></p><p>a fungal growth that typically takes the form of a domed cap on a stalk, with gills on the underside of the cap.</p>
+<p></p></div><div class="lex-entry"><p>ushee</p><p class="lect">Bésian Lanîk: <span class="pronunciation">uʃi</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><div class="tag-item">food</div><div class="tag-item">animal</div><div class="tag-item">livestock</div><div class="tag-item">farming</div><p></p><p>a fully grown female animal of a domesticated breed of ox, kept to produce milk or beef.</p>
+<p></p></div><div class="lex-entry"><p>vereen</p><p class="lect">Bésian Lanîk: <span class="pronunciation">vɛɾin</span></p><p class="lect">Bésian Lanîk</p><div class="sense">1.</div><div class="tag-item">noun</div><p></p><p>the quality or state of being true.</p>
+<p></p></div></div></div></body></html>
